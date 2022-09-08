@@ -10,9 +10,14 @@ export default function Users() {
     }
 
     function renderPhrase(count) {
-        if (count >= 0 && count < 10) {
+        if (count === 0) {
+            return (<h1 className='badge bg-danger fs-5'>С вами никто не хочет встретится</h1>)
+        }
+        if (count >= 10 && count < 20) {
+            return (<h1 className='badge bg-primary fs-5'>С вами хотят встретится { count.toString() } человек</h1>)
+        }
+        if (count > 0) {
             switch (count % 10) {
-                case 0: return (<h1 className='badge bg-danger fs-5'>С тобой никто не хочет встретится</h1>)
                 case 1: return (<h1 className='badge bg-primary fs-5'>С вами хочет встретится { count.toString() } человек</h1>)
                 case 2:
                 case 3:
@@ -25,9 +30,7 @@ export default function Users() {
                 default: break
             }
         }
-        if (count >= 10 && count < 20) {
-            return (<h1 className='badge bg-primary fs-5'>С вами хотят встретится { count.toString() } человек</h1>)
-        }
+       
     }
 
     function renderUser(user) {
