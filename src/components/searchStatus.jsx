@@ -1,7 +1,7 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const SearchStatus = ({ number }) => {
-
     const renderPhrase = (number) => {
         const lastOne = Number(number.toString().slice(-1));
         if (number > 4 && number < 15) return "человек тусанет";
@@ -10,16 +10,22 @@ const SearchStatus = ({ number }) => {
         return "человек тусанет";
     };
 
-    const getClasses = () =>  {
-        let className = "fs-4 badge bg-"
-        return className += number === 0 ? "danger" : "primary"
+    const getClasses = () => {
+        let className = "fs-4 badge bg-";
+        return (className += number === 0 ? "danger" : "primary");
     };
 
     return (
         <div>
-            <span className={ getClasses() }>{ number } { renderPhrase(number) } с тобой сегодня</span>
+            <span className={getClasses()}>
+                {number} {renderPhrase(number)} с тобой сегодня
+            </span>
         </div>
     );
+};
+
+SearchStatus.propTypes = {
+    number: PropTypes.number.isRequired
 };
 
 export default SearchStatus;
