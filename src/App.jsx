@@ -1,5 +1,5 @@
 import React from "react";
-import Page from "./components/page";
+import Page from "./pages/usersPage";
 
 const App = () => {
     return (
