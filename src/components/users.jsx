@@ -21,14 +21,14 @@ const Users = ({ users, onDeleteUser, onToggleBookMark }) => {
     useEffect(() => {
         api.professions
             .fetchAll()
-            .then(data => setProfessions(data));
+            .then(data => setProfessions(Object.assign(data)));
     }, []);
     useEffect(() => {
         setCurrentPage(1);
     }, [selectedProf]);
     const pageSize = 4;
     const filteredUsers = selectedProf
-        ? users.filter(user => (user.profession._id === selectedProf._id && user.profession.name === selectedProf.name))
+        ? users.filter(user => Object.keys(user.profession).every(key => user.profession[key] === selectedProf[key]))
         : users;
     const count = filteredUsers.length;
     const userCrop = paginate(filteredUsers, currentPage, pageSize);
