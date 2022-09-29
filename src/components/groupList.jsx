@@ -1,20 +1,34 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { isArray } from "lodash";
 const GroupList = ({ items, valueProperty, contentProperty, onItemSelect, selectedItem }) => {
     return (
         <ul className="list-group m-2">
-            { Object.keys(items).map(item => {
-                return (
-                    <li
-                        key={ items[item][valueProperty]}
-                        className={"list-group-item" + (items[item] === selectedItem ? " active" : "") }
-                        onClick={ () => onItemSelect(items[item]) }
-                        role = "button"
-                    >
-                        { items[item][contentProperty] }
-                    </li>
-                );
-            }) }
+            { isArray(items)
+                ? items.map(item => {
+                    return (
+                        <li
+                            key={ item[valueProperty]}
+                            className={"list-group-item" + (item === selectedItem ? " active" : "") }
+                            onClick={ () => onItemSelect(item) }
+                            role = "button"
+                        >
+                            { item[contentProperty] }
+                        </li>
+                    );
+                })
+                : Object.keys(items).map(item => {
+                    return (
+                        <li
+                            key={ items[item][valueProperty]}
+                            className={"list-group-item" + (items[item] === selectedItem ? " active" : "") }
+                            onClick={ () => onItemSelect(items[item]) }
+                            role = "button"
+                        >
+                            { items[item][contentProperty] }
+                        </li>
+                    );
+                }) }
         </ul>
     );
 };
