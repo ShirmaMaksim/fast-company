@@ -1,6 +1,6 @@
 import React from "react";
 import Bookmark from "./bookmark";
-import Qualities from "./qualitie";
+import QualitiesList from "./qualitiesList";
 import PropTypes from "prop-types";
 
 const User = ({
@@ -18,15 +18,16 @@ const User = ({
         <tr>
             <th scope="row">{name}</th>
             <td>
-                <Qualities qualities={qualities} />
+                <QualitiesList qualities={ qualities } />
             </td>
             <td>{profession.name}</td>
             <td>{completedMeetings.toString()}</td>
             <td>{rate.toString()} / 5</td>
             <td>
-                <button onClick={() => onToggleBookMark(_id)}>
-                    <Bookmark active={bookmark} />
-                </button>
+                <Bookmark
+                    active={ bookmark }
+                    onClick={() => onToggleBookMark(_id)}
+                />
             </td>
             <td>
                 <button

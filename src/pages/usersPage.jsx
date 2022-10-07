@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import api from "../api";
 import Users from "../components/users";
+
 const Page = () => {
     const [users, setUsers] = useState();
     useEffect(() => {
@@ -9,8 +10,8 @@ const Page = () => {
             .then(data => setUsers(data));
     }, []);
 
-    const handleDeleteUser = (userId) => {
-        setUsers((prev) => prev.filter((user) => user._id !== userId));
+    const handleDelete = (userId) => {
+        setUsers((prevState) => prevState.filter((user) => user._id !== userId));
     };
     const handleToggleBookMark = (id) => {
         setUsers((prevState) =>
@@ -27,11 +28,12 @@ const Page = () => {
             { users &&
                 <Users
                     users={ users }
-                    onDeleteUser={ handleDeleteUser }
+                    onDelete={ handleDelete }
                     onToggleBookMark={ handleToggleBookMark }
                 />
             }
         </>
     );
 };
+
 export default Page;

@@ -9,7 +9,7 @@ const Bookmark = ({ active }) => {
 
     return (
         <div>
-            <i className={getClasses()}></i>
+            <i className={ getClasses() }></i>
         </div>
     );
 };
