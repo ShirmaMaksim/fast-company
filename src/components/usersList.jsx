@@ -1,38 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import GroupList from "./groupList";
+import SearchStatus from "./searchStatus";
+import UsersTable from "./usersTable";
 import Pagination from "./pagination";
 import { paginate } from "../utils/paginate";
 import PropTypes from "prop-types";
-import api from "../api";
-import GroupList from "./groupList";
-import SearchStatus from "../components/searchStatus";
-import UsersTable from "./usersTable";
 import _ from "lodash";
 
-const Users = ({ users, onDelete, onToggleBookMark }) => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [professions, setProfessions] = useState();
-    const [selectedProf, setSelectedProf] = useState();
-    const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
-    const handlePageChange = (pageIndex) => {
-        setCurrentPage(pageIndex);
-    };
-
-    const handleProfessionSelect = item => {
-        setSelectedProf(item);
-    };
-
-    const handleSort = item => {
-        setSortBy(item);
-    };
-
-    useEffect(() => {
-        api.professions
-            .fetchAll()
-            .then(data => setProfessions(Object.assign(data)));
-    }, []);
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [selectedProf]);
+const UsersList = ({
+    currentPage,
+    professions,
+    selectedProf,
+    sortBy,
+    users,
+    onDelete,
+    onToggleBookMark,
+    onPageChange,
+    onProfessionSelect,
+    onSort,
+    onClearFilter
+}) => {
     const pageSize = 4;
 
     if (users) {
@@ -42,9 +29,6 @@ const Users = ({ users, onDelete, onToggleBookMark }) => {
         const count = filteredUsers.length;
         const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
         const userCrop = paginate(sortedUsers, currentPage, pageSize);
-        const clearFilter = () => {
-            setSelectedProf();
-        };
         return (
             <div className="d-flex">
                 { professions &&
@@ -52,9 +36,9 @@ const Users = ({ users, onDelete, onToggleBookMark }) => {
                         <GroupList
                             selectedItem={ selectedProf }
                             items={ professions }
-                            onItemSelect={ handleProfessionSelect }
+                            onItemSelect={ onProfessionSelect }
                         />
-                        <button className="btn btn-secondary m-2" onClick={ clearFilter }>Очистить</button>
+                        <button className="btn btn-secondary m-2" onClick={ onClearFilter }>Очистить</button>
                     </div>
                 }
                 <div className="d-flex flex-column">
@@ -62,7 +46,7 @@ const Users = ({ users, onDelete, onToggleBookMark }) => {
                     { count !== 0 &&
                         <UsersTable
                             users={ userCrop }
-                            onSort={ handleSort }
+                            onSort={ onSort }
                             selectedSort={ sortBy }
                             onDelete={ onDelete }
                             onToggleBookMark={ onToggleBookMark }
@@ -74,7 +58,7 @@ const Users = ({ users, onDelete, onToggleBookMark }) => {
                                 itemsCount={ count }
                                 pageSize={ pageSize }
                                 currentPage={ currentPage }
-                                onPageChange={ handlePageChange }
+                                onPageChange={ onPageChange }
                             />
                         </div>
                     }
@@ -87,10 +71,18 @@ const Users = ({ users, onDelete, onToggleBookMark }) => {
     );
 };
 
-Users.propTypes = {
+UsersList.propTypes = {
+    currentPage: PropTypes.number.isRequired,
+    professions: PropTypes.object.isRequired,
+    selectedProf: PropTypes.object,
+    sortBy: PropTypes.object.isRequired,
     users: PropTypes.arrayOf(PropTypes.object).isRequired,
     onDelete: PropTypes.func.isRequired,
-    onToggleBookMark: PropTypes.func.isRequired
+    onToggleBookMark: PropTypes.func.isRequired,
+    onPageChange: PropTypes.func.isRequired,
+    onProfessionSelect: PropTypes.func.isRequired,
+    onSort: PropTypes.func.isRequired,
+    onClearFilter: PropTypes.func.isRequired
 };
 
-export default Users;
+export default UsersList;

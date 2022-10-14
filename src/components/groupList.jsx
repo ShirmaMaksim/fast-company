@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { isArray } from "lodash";
+
 const GroupList = ({ items, valueProperty, contentProperty, onItemSelect, selectedItem }) => {
     return (
         <ul className="list-group m-2">
@@ -32,10 +33,12 @@ const GroupList = ({ items, valueProperty, contentProperty, onItemSelect, select
         </ul>
     );
 };
+
 GroupList.defaultProps = {
     valueProperty: "_id",
     contentProperty: "name"
 };
+
 GroupList.propTypes = {
     items: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     valueProperty: PropTypes.string.isRequired,
@@ -43,4 +46,5 @@ GroupList.propTypes = {
     onItemSelect: PropTypes.func.isRequired,
     selectedItem: PropTypes.object
 };
+
 export default GroupList;
