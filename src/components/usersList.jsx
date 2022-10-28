@@ -6,6 +6,7 @@ import Pagination from "./pagination";
 import { paginate } from "../utils/paginate";
 import PropTypes from "prop-types";
 import _ from "lodash";
+import SearchString from "./searchString";
 
 const UsersList = ({
     currentPage,
@@ -13,19 +14,21 @@ const UsersList = ({
     selectedProf,
     sortBy,
     users,
+    searchStringValue,
     onDelete,
     onToggleBookMark,
     onPageChange,
     onProfessionSelect,
     onSort,
-    onClearFilter
+    onClearFilter,
+    onSearchStringChange
 }) => {
     const pageSize = 4;
 
     if (users) {
-        const filteredUsers = selectedProf
-            ? users.filter(user => Object.keys(user.profession).every(key => user.profession[key] === selectedProf[key]))
-            : users;
+        const filteredUsers = searchStringValue
+            ? (users.filter(user => user.name.includes(searchStringValue)))
+            : (selectedProf ? users.filter(user => Object.keys(user.profession).every(key => user.profession[key] === selectedProf[key])) : users);
         const count = filteredUsers.length;
         const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
         const userCrop = paginate(sortedUsers, currentPage, pageSize);
@@ -43,6 +46,7 @@ const UsersList = ({
                 }
                 <div className="d-flex flex-column">
                     <SearchStatus number={count} />
+                    <SearchString value={ searchStringValue } onChange={ onSearchStringChange } />
                     { count !== 0 &&
                         <UsersTable
                             users={ userCrop }
@@ -77,12 +81,14 @@ UsersList.propTypes = {
     selectedProf: PropTypes.object,
     sortBy: PropTypes.object.isRequired,
     users: PropTypes.arrayOf(PropTypes.object).isRequired,
+    searchStringValue: PropTypes.string,
     onDelete: PropTypes.func.isRequired,
     onToggleBookMark: PropTypes.func.isRequired,
     onPageChange: PropTypes.func.isRequired,
     onProfessionSelect: PropTypes.func.isRequired,
     onSort: PropTypes.func.isRequired,
-    onClearFilter: PropTypes.func.isRequired
+    onClearFilter: PropTypes.func.isRequired,
+    onSearchStringChange: PropTypes.func
 };
 
 export default UsersList;

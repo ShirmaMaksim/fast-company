@@ -14,6 +14,13 @@ const Users = () => {
     const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
     const [users, setUsers] = useState();
     const [user, setUser] = useState();
+    const [searchStringValue, setSearchString] = useState("");
+
+    const handleSearchStringChange = ({ target }) => {
+        const { value } = target;
+        setSearchString(value);
+        handleClearFilter();
+    };
 
     const handleDelete = (id) => {
         setUsers((prevState) => prevState.filter((user) => user._id !== id));
@@ -35,6 +42,7 @@ const Users = () => {
     };
 
     const handleProfessionSelect = item => {
+        setSearchString("");
         setSelectedProf(item);
     };
 
@@ -79,12 +87,14 @@ const Users = () => {
                     selectedProf={ selectedProf }
                     sortBy={ sortBy }
                     users={ users }
+                    searchStringValue={ searchStringValue }
                     onDelete={ handleDelete }
                     onToggleBookMark={ handleToggleBookMark }
                     onPageChange={ handlePageChange }
                     onProfessionSelect={ handleProfessionSelect }
                     onSort={ handleSort }
                     onClearFilter={ handleClearFilter }
+                    onSearchStringChange={ handleSearchStringChange }
                 />) }
         </>
     );
