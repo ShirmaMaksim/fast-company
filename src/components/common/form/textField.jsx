@@ -7,6 +7,9 @@ const TextField = ({ label, type, name, value, onChange, error }) => {
     const toggleShowPassword = () => {
         setShowPassword(prevState => !prevState);
     };
+    const handleChange = ({ target }) => {
+        onChange({ name: target.name, value: target.value });
+    };
     return (
         <div className="mb-4 ">
             <label htmlFor={ name }>{ label }</label>
@@ -16,7 +19,7 @@ const TextField = ({ label, type, name, value, onChange, error }) => {
                     id={ name }
                     name={ name }
                     value={ value }
-                    onChange={ onChange }
+                    onChange={ handleChange }
                     className={ `form-control ${getClasses}` }
                 />
                 { type === "password" && (

@@ -1,16 +1,27 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Bookmark from "./bookmark";
-import QualitiesList from "./qualitiesList";
-import Table from "./table";
+import Bookmark from "../common/bookmark";
+import Qualities from "./qualities";
+import Table from "../common/table";
+import { Link } from "react-router-dom";
+import _ from "lodash";
 
 const UsersTable = ({ users, onSort, selectedSort, onToggleBookMark, onDelete, ...rest }) => {
     const columns = {
-        name: { path: "name", name: "Имя", active: false },
+        name: {
+            path: "name",
+            name: "Имя",
+            active: false,
+            component: (user) => (
+                <Link to={ `userspage/${user._id}` }>
+                    { user.name }
+                </Link>
+            )
+        },
         qualities: {
             name: "Качества",
             component: (user) => (
-                <QualitiesList qualities={ user.qualities } />
+                <Qualities qualities={ user.qualities } />
             ),
             active: false
         },
@@ -40,12 +51,24 @@ const UsersTable = ({ users, onSort, selectedSort, onToggleBookMark, onDelete, .
         }
     };
 
+    const handleRenderContent = (item, column) => {
+        if (columns[column].component) {
+            const component = columns[column].component;
+            if (typeof component === "function") {
+                return component(item);
+            }
+            return component;
+        }
+        return _.get(item, columns[column].path);
+    };
+
     return (
         <Table
             onSort={ onSort }
             selectedSort={ selectedSort }
             columns={ columns }
             data={ users }
+            onRenderContent={ handleRenderContent }
         />
     );
 };

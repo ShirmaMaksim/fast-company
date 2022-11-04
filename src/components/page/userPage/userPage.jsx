@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { useHistory } from "react-router-dom";
+import api from "../../../api";
+import { Link } from "react-router-dom";
 
-const UserPage = ({ user }) => {
-    const history = useHistory();
-
-    const handleSaveHistory = () => {
-        history.push("/userspage");
-    };
+const UserPage = ({ userId }) => {
+    const [user, setUser] = useState();
+    useEffect(() => {
+        setUser();
+        api.users
+            .getById(userId)
+            .then(data => setUser(Object.assign(data)));
+    }, [userId]);
 
     if (user) {
         return (
@@ -23,17 +26,19 @@ const UserPage = ({ user }) => {
                 </div>
                 <h3>Завершено встреч: { user.completedMeetings }</h3>
                 <h3>Рейтинг: { user.rate }</h3>
-                <button onClick={ handleSaveHistory }>Все пользователи</button>
+                <Link to={ `${userId}/edit` }>
+                    <button>Изменить</button>
+                </Link>
             </>
         );
     }
     return (
-        <h1>User wasn`t found</h1>
+        <div>Loading...</div>
     );
 };
 
 UserPage.propTypes = {
-    user: PropTypes.object
+    userId: PropTypes.string
 };
 
 export default UserPage;

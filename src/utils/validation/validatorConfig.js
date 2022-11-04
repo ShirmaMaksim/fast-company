@@ -21,5 +21,15 @@ export const validatorConfig = {
             message: "Пароль должен состоять минимум из 8 символов",
             length: 8
         }
+    },
+    profession: {
+        isRequired: {
+            message: "Обязательно выберите вашу профессию"
+        }
+    },
+    licence: {
+        isRequired: {
+            message: "Вы не можете использовать наш сервис без подтверждения лицензионного соглашения"
+        }
     }
 };
