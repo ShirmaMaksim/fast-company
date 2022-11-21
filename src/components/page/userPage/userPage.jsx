@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import api from "../../../api";
-import { Link } from "react-router-dom";
+import Comments from "../../ui/comments/comments";
+import { UserCard, QualitiesCard, MeetingsCard } from "../../ui/cards";
 
 const UserPage = ({ userId }) => {
     const [user, setUser] = useState();
@@ -11,24 +12,17 @@ const UserPage = ({ userId }) => {
             .getById(userId)
             .then(data => setUser(Object.assign(data)));
     }, [userId]);
-
     if (user) {
         return (
             <>
-                <h1>{ user.name }</h1>
-                <h3>Профессия: { user.profession.name }</h3>
-                <div>
-                    { user.qualities.map(qualitiy => (
-                        <span key={qualitiy._id} className={`badge bg-${qualitiy.color} mx-1`}>
-                            { qualitiy.name }
-                        </span>
-                    )) }
+                <div className="col-md-4 mb-3">
+                    <UserCard user={ user } />
+                    <QualitiesCard qualities={ user.qualities } />
+                    <MeetingsCard completedMeetings={ user.completedMeetings } />
                 </div>
-                <h3>Завершено встреч: { user.completedMeetings }</h3>
-                <h3>Рейтинг: { user.rate }</h3>
-                <Link to={ `${userId}/edit` }>
-                    <button>Изменить</button>
-                </Link>
+                <div className="col-md-8">
+                    <Comments />
+                </div>
             </>
         );
     }

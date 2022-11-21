@@ -1,4 +1,9 @@
 export const validatorConfig = {
+    name: {
+        isRequired: {
+            message: "Имя обязательна для заполнения"
+        }
+    },
     email: {
         isRequired: {
             message: "Электронная почта обязательна для заполнения"
@@ -27,9 +32,19 @@ export const validatorConfig = {
             message: "Обязательно выберите вашу профессию"
         }
     },
+    qualities: {
+        isRequired: {
+            message: "Обязательно для заполнения"
+        }
+    },
     licence: {
         isRequired: {
             message: "Вы не можете использовать наш сервис без подтверждения лицензионного соглашения"
+        }
+    },
+    content: {
+        isRequired: {
+            message: "Комментарий не может быть пустым"
         }
     }
 };

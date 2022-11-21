@@ -43,4 +43,4 @@ RadioField.propTypes = {
     options: PropTypes.array
 };
 
-export default RadioField;
+export default React.memo(RadioField);

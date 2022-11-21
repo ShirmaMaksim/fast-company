@@ -6,8 +6,10 @@ export const validator = (data, config) => {
         case "isRequired": {
             if (typeof data === "boolean") {
                 statusValidate = !data;
-            } else {
+            } else if (typeof data === "string") {
                 statusValidate = data.trim() === "";
+            } else {
+                statusValidate = data.length === 0;
             }
             break;
         }

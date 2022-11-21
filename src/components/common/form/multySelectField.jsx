@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 import Select from "react-select";
 import { convertObjToArr } from "../../../utils/convertObjectToArray";
 
-const MultySelectField = ({ label, name, onChange, options, defaultValue }) => {
+const MultySelectField = ({ label, name, onChange, options, value, error }) => {
     const optionsArray = convertObjToArr(options, "label", "value");
 
-    const handleChange = value => {
+    const handleChange = (value) => {
         onChange({ name, value });
     };
 
@@ -18,13 +18,14 @@ const MultySelectField = ({ label, name, onChange, options, defaultValue }) => {
             <Select
                 closeMenuOnSelect={ false }
                 isMulti
-                defaultValue={ defaultValue }
+                value={ value }
                 options={ optionsArray }
                 className="basic-multi-select"
                 classNamePrefix="select"
                 name={ name }
                 onChange={ handleChange }
             />
+            { error && <p className="text-danger" style={{ "font-size": "14px" }}>{ error }</p> }
         </div>
     );
 };
@@ -34,7 +35,8 @@ MultySelectField.propTypes = {
     name: PropTypes.string,
     onChange: PropTypes.func,
     options: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-    defaultValue: PropTypes.array
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+    error: PropTypes.string
 };
 
-export default MultySelectField;
+export default React.memo(MultySelectField);

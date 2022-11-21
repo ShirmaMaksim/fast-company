@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 const CheckBoxField = ({ name, value, onChange, children, error }) => {
     const handleChange = () => {
+        // eslint-disable-next-line
         onChange({ name: name, value: !value });
     };
     const getClasses = error ? " is-invalid" : "";
@@ -26,10 +27,10 @@ const CheckBoxField = ({ name, value, onChange, children, error }) => {
 
 CheckBoxField.propTypes = {
     name: PropTypes.string,
-    value: PropTypes.bool,
+    value: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
     onChange: PropTypes.func,
-    children: PropTypes.oneOfType(PropTypes.arrayOf(PropTypes.node), PropTypes.node),
+    children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
     error: PropTypes.string
 };
 
-export default CheckBoxField;
+export default React.memo(CheckBoxField);

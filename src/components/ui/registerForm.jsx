@@ -1,23 +1,9 @@
 import React, { useState, useEffect } from "react";
-import TextField from "../common/form/textField";
-import SelectField from "../common/form/selectField";
-import { validator } from "../../utils/validation/validator";
-import { validatorConfig } from "../../utils/validation/validatorConfig";
+import { TextField, RadioField, SelectField, MultySelectField, CheckBoxField } from "../common/form/fields";
 import api from "../../api";
-import RadioField from "../common/form/radioField";
-import MultySelectField from "../common/form/multySelectField";
-import CheckBoxField from "../common/form/checkBoxField";
+import FormComponent from "../common/form";
 
 const RegisterForm = () => {
-    const [data, setData] = useState({
-        email: "",
-        password: "",
-        profession: "",
-        sex: "male",
-        qualities: [],
-        licence: false
-    });
-    const [errors, setErrors] = useState({});
     const [professions, setProfessions] = useState();
     const [qualities, setQualities] = useState();
 
@@ -30,63 +16,34 @@ const RegisterForm = () => {
             .then(data => setQualities(Object.assign(data)));
     }, []);
 
-    const handleChange = (target) => {
-        const { name, value } = target;
-        setData(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
-
-    useEffect(() => {
-        validate();
-    }, [data]);
-
-    const validate = () => {
-        const errors = validator(data, validatorConfig);
-        setErrors(errors);
-        return Object.keys(errors).length === 0;
-    };
-    const isValid = Object.keys(errors).length === 0;
-
-    const handleSumbit = (e) => {
-        e.preventDefault();
-        const isValide = validate();
-        if (!isValide) return;
+    const handleSubmit = (data) => {
         console.log(data);
+        // Обратотка Data и добавление её в local.storage
     };
 
     return (
-        <form onSubmit={ handleSumbit }>
+        <FormComponent onSubmit={ handleSubmit }>
             <TextField
                 label="email"
                 name="email"
-                value={ data.email }
-                onChange={ handleChange }
-                error={ errors.email }
             />
             <TextField
                 label="password"
                 type="password"
                 name="password"
-                value={ data.password }
-                onChange={ handleChange }
-                error={ errors.password }
+            />
+            <TextField
+                label="Имя"
+                name="name"
             />
             <SelectField
-                label="Выберите вашу профессию"
-                value={ data.profession }
+                label="Профессия"
                 name="profession"
-                onChange={ handleChange }
-                defaultOption="Выберите профессию..."
                 options={ professions }
-                error={ errors.profession }
             />
             <RadioField
-                label="Выберите пол"
-                value={ data.sex }
+                label="Пол"
                 name="sex"
-                onChange={ handleChange }
                 options={ [
                     { name: "Male", value: "male" },
                     { name: "Female", value: "female" },
@@ -94,28 +51,22 @@ const RegisterForm = () => {
                 ] }
             />
             <MultySelectField
-                label="Выберите ваши качества"
-                options={ qualities }
-                onChange={ handleChange }
-                defaultValue={ data.qualities }
+                label="Качества"
                 name="qualities"
+                options={ qualities }
             />
             <CheckBoxField
                 name="licence"
-                value={ data.licence }
-                onChange={ handleChange }
-                error={ errors.licence }
             >
                 Подтвердить <a>лицензионное соглашение</a>
             </CheckBoxField>
             <button
                 type="submit"
-                disabled={ !isValid }
                 className="btn btn-primary w-100 mx-auto"
             >
-                Submit
+                Сохранить
             </button>
-        </form>
+        </FormComponent>
     );
 };
 

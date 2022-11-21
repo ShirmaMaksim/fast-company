@@ -13,7 +13,7 @@ const UsersTable = ({ users, onSort, selectedSort, onToggleBookMark, onDelete, .
             name: "Имя",
             active: false,
             component: (user) => (
-                <Link to={ `userspage/${user._id}` }>
+                <Link to={ `users/${user._id}` }>
                     { user.name }
                 </Link>
             )

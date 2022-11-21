@@ -2,16 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import { convertObjToArr } from "../../../utils/convertObjectToArray";
 
-const TextField = ({ label, name, value, onChange, defaultOption, options, error }) => {
-    // const optionsArray = !Array.isArray(options) && typeof options === "object"
-    //     ? Object.keys(options).map(optionName => ({ name: options[optionName].name, value: options[optionName]._id }))
-    //     : options;
+const SelectField = ({ label, name, value, onChange, defaultOption, options, error }) => {
     const optionsArray = convertObjToArr(options, "name", "value");
     const getClasses = error ? " is-invalid" : "";
     const handleChange = ({ target }) => {
         onChange({ name: target.name, value: target.value });
     };
-
     return (
         <div className="mb-4">
             <label className="form-label" htmlFor={ name }>
@@ -41,7 +37,7 @@ const TextField = ({ label, name, value, onChange, defaultOption, options, error
     );
 };
 
-TextField.propTypes = {
+SelectField.propTypes = {
     label: PropTypes.string,
     value: PropTypes.string,
     name: PropTypes.string,
@@ -51,4 +47,4 @@ TextField.propTypes = {
     error: PropTypes.string
 };
 
-export default TextField;
+export default React.memo(SelectField);
