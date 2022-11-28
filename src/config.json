@@ -1,0 +1,4 @@
+{
+    "API_BASE_URL": "http://localhost:4000/api/v1/",
+    "SENTRY_DNS": "https://2b06ebed07a24aea9b352f8c430e0140@o4504218568097792.ingest.sentry.io/4504218568949760"
+}

@@ -68,53 +68,57 @@ const EditUserPage = ({ userId }) => {
     }, [data]);
 
     return (
-        <>
-            { !isLoading && professions && qualities
-                ? (
-                    <FormComponent
-                        onSubmit={ handleSubmit }
-                        defaultData={ data }
-                    >
-                        <TextField
-                            label="Имя"
-                            name="name"
-                            autoFocus
-                        />
-                        <TextField
-                            label="email"
-                            name="email"
-                        />
-                        <SelectField
-                            label="Профессия"
-                            name="profession"
-                            options={ professions }
-                        />
-                        <RadioField
-                            label="Пол"
-                            name="sex"
-                            options={ [
-                                { name: "Male", value: "male" },
-                                { name: "Female", value: "female" },
-                                { name: "Other", value: "other" }
-                            ] }
-                        />
-                        <MultySelectField
-                            label="Качества"
-                            name="qualities"
-                            options={ qualities }
-                        />
-                        <button
-                            type="submit"
-                            className="btn btn-primary w-100 mx-auto"
-                        >
-                            Обновить
-                        </button>
-                    </FormComponent>
-                ) : (
-                    <h3>Loading...</h3>
-                )
-            }
-        </>
+        <div className="container">
+            <div className="row">
+                <div className=".col-md-6 .offset-md-3 shadow p-4">
+                    { !isLoading && professions && qualities
+                        ? (
+                            <FormComponent
+                                onSubmit={ handleSubmit }
+                                defaultData={ data }
+                            >
+                                <TextField
+                                    label="Имя"
+                                    name="name"
+                                    autoFocus
+                                />
+                                <TextField
+                                    label="email"
+                                    name="email"
+                                />
+                                <SelectField
+                                    label="Профессия"
+                                    name="profession"
+                                    options={ professions }
+                                />
+                                <RadioField
+                                    label="Пол"
+                                    name="sex"
+                                    options={ [
+                                        { name: "Male", value: "male" },
+                                        { name: "Female", value: "female" },
+                                        { name: "Other", value: "other" }
+                                    ] }
+                                />
+                                <MultySelectField
+                                    label="Качества"
+                                    name="qualities"
+                                    options={ qualities }
+                                />
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary w-100 mx-auto"
+                                >
+                                    Обновить
+                                </button>
+                            </FormComponent>
+                        ) : (
+                            <h3>Loading...</h3>
+                        )
+                    }
+                </div>
+            </div>
+        </div>
     );
 };
 

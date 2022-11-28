@@ -5,37 +5,29 @@ import Qualities from "./qualities";
 import Table from "../common/table";
 import { Link } from "react-router-dom";
 import _ from "lodash";
+import Profession from "./profession";
 
 const UsersTable = ({ users, onSort, selectedSort, onToggleBookMark, onDelete, ...rest }) => {
     const columns = {
         name: {
             path: "name",
             name: "Имя",
-            active: false,
             component: (user) => (
                 <Link to={ `users/${user._id}` }>
                     { user.name }
                 </Link>
             )
         },
-        qualities: {
-            name: "Качества",
-            component: (user) => (
-                <Qualities qualities={ user.qualities } />
-            ),
-            active: false
-        },
-        professions: { path: "profession.name", name: "Проффессия", active: false },
-        completedMeetings: { path: "completedMeetings", name: "Встретился, раз", active: false },
-        rate: { path: "rate", name: "Оценка", active: false },
+        qualities: { name: "Качества", component: (user) => (<Qualities qualitiesId={ user.qualities } />) },
+        professions: { name: "Проффессия", component: (user) => (<Profession id={ user.profession } />) },
+        completedMeetings: { path: "completedMeetings", name: "Встретился, раз" },
+        rate: { path: "rate", name: "Оценка" },
         bookmark: {
             path: "bookmark",
             name: "Избранное",
             component: (user) => (
                 <button onClick={ () => onToggleBookMark(user._id) }>
-                    <Bookmark
-                        active={ user.bookmark }
-                    />
+                    <Bookmark />
                 </button>
             )
         },

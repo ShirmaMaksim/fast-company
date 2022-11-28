@@ -7,6 +7,7 @@ import { paginate } from "../../../utils/paginate";
 import _ from "lodash";
 import SearchString from "../../ui/searchString";
 import api from "../../../api";
+import { useUser } from "../../../hooks/useUsers";
 
 const UsersListPage = () => {
     const pageSize = 4;
@@ -15,59 +16,46 @@ const UsersListPage = () => {
     const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
-    const [users, setUsers] = useState();
     const [searchStringValue, setSearchString] = useState("");
+
+    const { users } = useUser();
 
     const handleSearchStringChange = ({ target }) => {
         const { value } = target;
         setSearchString(value);
         handleClearFilter();
     };
-
     const handleDelete = (id) => {
-        setUsers((prevState) => prevState.filter((user) => user._id !== id));
+        // setUsers((prevState) => prevState.filter((user) => user._id !== id));
+        console.log(id);
     };
-
     const handleToggleBookMark = (id) => {
-        setUsers((prevState) =>
-            prevState.map((item) => {
-                if (item._id === id) {
-                    return { ...item, bookmark: !item.bookmark };
-                }
-                return item;
-            })
-        );
+        const newArray = users.map((item) => {
+            if (item._id === id) {
+                return { ...item, bookmark: !item.bookmark };
+            }
+            return item;
+        });
+        console.log(newArray);
     };
-
     const handlePageChange = (pageIndex) => {
         setCurrentPage(pageIndex);
     };
-
     const handleProfessionSelect = item => {
         setSearchString("");
         setSelectedProf(item);
     };
-
     const handleSort = item => {
         setSortBy(item);
     };
-
     const handleClearFilter = () => {
         setSelectedProf();
     };
-
-    useEffect(() => {
-        api.users
-            .fetchAll()
-            .then(data => setUsers(data));
-    }, []);
-
     useEffect(() => {
         api.professions
             .fetchAll()
             .then(data => setProfessions(Object.assign(data)));
     }, []);
-
     useEffect(() => {
         setCurrentPage(1);
     }, [selectedProf]);
@@ -80,39 +68,41 @@ const UsersListPage = () => {
         const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
         const userCrop = paginate(sortedUsers, currentPage, pageSize);
         return (
-            <div className="d-flex">
-                { professions &&
-                    <div className="d-flex flex-column flex-shrink-0 p-3">
-                        <GroupList
-                            selectedItem={ selectedProf }
-                            items={ professions }
-                            onItemSelect={ handleProfessionSelect }
-                        />
-                        <button className="btn btn-secondary m-2" onClick={ handleClearFilter }>Очистить</button>
-                    </div>
-                }
-                <div className="d-flex flex-column">
-                    <SearchStatus number={count} />
-                    <SearchString value={ searchStringValue } onChange={ handleSearchStringChange } />
-                    { count !== 0 &&
-                        <UsersTable
-                            users={ userCrop }
-                            onSort={ handleSort }
-                            selectedSort={ sortBy }
-                            onDelete={ handleDelete }
-                            onToggleBookMark={ handleToggleBookMark }
-                        />
-                    }
-                    { filteredUsers.length > pageSize &&
-                        <div className="d-flex justify-content-center">
-                            <Pagination
-                                itemsCount={ count }
-                                pageSize={ pageSize }
-                                currentPage={ currentPage }
-                                onPageChange={ handlePageChange }
+            <div className="container">
+                <div className="d-flex">
+                    { professions &&
+                        <div className="d-flex flex-column flex-shrink-0 p-3">
+                            <GroupList
+                                selectedItem={ selectedProf }
+                                items={ professions }
+                                onItemSelect={ handleProfessionSelect }
                             />
+                            <button className="btn btn-secondary m-2" onClick={ handleClearFilter }>Очистить</button>
                         </div>
                     }
+                    <div className="d-flex flex-column">
+                        <SearchStatus number={count} />
+                        <SearchString value={ searchStringValue } onChange={ handleSearchStringChange } />
+                        { count !== 0 &&
+                            <UsersTable
+                                users={ userCrop }
+                                onSort={ handleSort }
+                                selectedSort={ sortBy }
+                                onDelete={ handleDelete }
+                                onToggleBookMark={ handleToggleBookMark }
+                            />
+                        }
+                        { filteredUsers.length > pageSize &&
+                            <div className="d-flex justify-content-center">
+                                <Pagination
+                                    itemsCount={ count }
+                                    pageSize={ pageSize }
+                                    currentPage={ currentPage }
+                                    onPageChange={ handlePageChange }
+                                />
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
         );

@@ -14,16 +14,18 @@ const UserPage = ({ userId }) => {
     }, [userId]);
     if (user) {
         return (
-            <>
-                <div className="col-md-4 mb-3">
-                    <UserCard user={ user } />
-                    <QualitiesCard qualities={ user.qualities } />
-                    <MeetingsCard completedMeetings={ user.completedMeetings } />
+            <div className="container">
+                <div className="row gutters-sm">
+                    <div className="col-md-4 mb-3">
+                        <UserCard user={ user } />
+                        <QualitiesCard qualities={ user.qualities } />
+                        <MeetingsCard completedMeetings={ user.completedMeetings } />
+                    </div>
+                    <div className="col-md-8">
+                        <Comments />
+                    </div>
                 </div>
-                <div className="col-md-8">
-                    <Comments />
-                </div>
-            </>
+            </div>
         );
     }
     return (
