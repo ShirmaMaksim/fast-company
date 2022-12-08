@@ -1,24 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { TextField, RadioField, SelectField, MultySelectField, CheckBoxField } from "../common/form/fields";
-import api from "../../api";
 import FormComponent from "../common/form";
+import { useQualities } from "../../hooks/useQualities";
+import { useProfessions } from "../../hooks/useProfession";
+import { useAuth } from "../../hooks/useAuth";
+import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const RegisterForm = () => {
-    const [professions, setProfessions] = useState();
-    const [qualities, setQualities] = useState();
+    const history = useHistory();
+    const { qualities } = useQualities();
+    const { professions } = useProfessions();
+    const qualitiesList = qualities.map(quality => ({ label: quality.name, value: quality._id }));
+    const professionsList = professions.map(profession => ({ label: profession.name, value: profession._id }));
 
-    useEffect(() => {
-        api.professions
-            .fetchAll()
-            .then(data => setProfessions(Object.assign(data)));
-        api.qualities
-            .fetchAll()
-            .then(data => setQualities(Object.assign(data)));
-    }, []);
+    const { signUp } = useAuth();
 
-    const handleSubmit = (data) => {
-        console.log(data);
-        // Обратотка Data и добавление её в local.storage
+    const handleSubmit = async(data) => {
+        const newData = {
+            ...data,
+            qualities: data.qualities.map(quality => (quality.value))
+        };
+        try {
+            await signUp(newData);
+            history.push("/");
+        } catch (error) {
+            toast.error(error.email);
+        }
     };
 
     return (
@@ -39,7 +47,7 @@ const RegisterForm = () => {
             <SelectField
                 label="Профессия"
                 name="profession"
-                options={ professions }
+                options={ professionsList }
             />
             <RadioField
                 label="Пол"
@@ -53,7 +61,7 @@ const RegisterForm = () => {
             <MultySelectField
                 label="Качества"
                 name="qualities"
-                options={ qualities }
+                options={ qualitiesList }
             />
             <CheckBoxField
                 name="licence"
@@ -64,7 +72,7 @@ const RegisterForm = () => {
                 type="submit"
                 className="btn btn-primary w-100 mx-auto"
             >
-                Сохранить
+                Sign Up
             </button>
         </FormComponent>
     );

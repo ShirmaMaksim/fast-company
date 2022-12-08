@@ -15,8 +15,7 @@ const FormComponent = ({ children, onSubmit, defaultData }) => {
         setErrors(errors);
         return Object.keys(errors).length === 0;
     }, [validatorConfig, setErrors]);
-    const isValid = Object.keys(data).length === (children.length - 1) &&
-        Object.keys(errors).length === 0;
+    const isValid = Object.keys(data).length === (children.length - 1) && Object.keys(errors).length === 0;
 
     const handleChange = useCallback(({ name, value }) => {
         setData(prevState => ({
@@ -30,9 +29,7 @@ const FormComponent = ({ children, onSubmit, defaultData }) => {
         const isValid = validate();
         if (!isValid) return;
         onSubmit(data);
-        setData(defaultData
-            ? { ...defaultData }
-            : {});
+        setData({});
         setErrors({});
     };
 

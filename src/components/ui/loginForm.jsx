@@ -1,10 +1,25 @@
 import React from "react";
-import { TextField, CheckBoxField } from "../common/form/fields";
+import { TextField } from "../common/form/fields";
 import FormComponent from "../common/form";
+import { useAuth } from "../../hooks/useAuth";
+import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
 
 const LoginForm = () => {
-    const handleSubmit = (data) => {
-        console.log(data);
+    const history = useHistory();
+    const { signIn } = useAuth();
+
+    const handleSubmit = async(data) => {
+        const newData = {
+            email: data.email,
+            password: data.password
+        };
+        try {
+            await signIn(newData);
+            history.push("/");
+        } catch (error) {
+            toast.error(error.email);
+        }
     };
 
     return (
@@ -18,16 +33,11 @@ const LoginForm = () => {
                 type="password"
                 name="password"
             />
-            <CheckBoxField
-                name="stayOn"
-            >
-                Оставаться в системе
-            </CheckBoxField>
             <button
                 type="submit"
                 className="btn btn-primary w-100 mx-auto"
             >
-                Submit
+                Sign In
             </button>
         </FormComponent>
     );

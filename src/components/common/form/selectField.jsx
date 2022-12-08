@@ -26,9 +26,9 @@ const SelectField = ({ label, name, value, onChange, defaultOption, options, err
                         <option
                             key={ option.value }
                             value={ option.value }
-                            name={ option.name }
+                            name={ option.label }
                         >
-                            { option.name }
+                            { option.label }
                         </option>
                     )) }
             </select>

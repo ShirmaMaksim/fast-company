@@ -6,19 +6,19 @@ import Pagination from "../../common/pagination";
 import { paginate } from "../../../utils/paginate";
 import _ from "lodash";
 import SearchString from "../../ui/searchString";
-import api from "../../../api";
 import { useUser } from "../../../hooks/useUsers";
+import { useProfessions } from "../../../hooks/useProfession";
 
 const UsersListPage = () => {
     const pageSize = 4;
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [professions, setProfessions] = useState();
     const [selectedProf, setSelectedProf] = useState();
     const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
     const [searchStringValue, setSearchString] = useState("");
 
     const { users } = useUser();
+    const { professions } = useProfessions();
 
     const handleSearchStringChange = ({ target }) => {
         const { value } = target;
@@ -51,11 +51,6 @@ const UsersListPage = () => {
     const handleClearFilter = () => {
         setSelectedProf();
     };
-    useEffect(() => {
-        api.professions
-            .fetchAll()
-            .then(data => setProfessions(Object.assign(data)));
-    }, []);
     useEffect(() => {
         setCurrentPage(1);
     }, [selectedProf]);
