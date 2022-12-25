@@ -1,12 +1,13 @@
 import React from "react";
-import PropTypes from "prop-types";
 import Quality from "./quality";
 import { useQualities } from "../../../hooks/useQualities";
+import { useAuth } from "../../../hooks/useAuth";
 
-const Qualities = ({ qualitiesId }) => {
+const Qualities = () => {
+    const { currentUser } = useAuth();
     const { qualities, isLoading } = useQualities();
     const sortedQualities = [];
-    qualitiesId.forEach(id => {
+    currentUser.qualities.forEach(id => {
         qualities.forEach(qualitiy => {
             if (qualitiy._id === id) {
                 sortedQualities.push(qualitiy);
@@ -23,10 +24,6 @@ const Qualities = ({ qualitiesId }) => {
         );
     }
     return "Loading...";
-};
-
-Qualities.propTypes = {
-    qualitiesId: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default Qualities;

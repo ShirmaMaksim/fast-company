@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import _ from "lodash";
 import Profession from "./profession";
 
-const UsersTable = ({ users, onSort, selectedSort, onToggleBookMark, onDelete, ...rest }) => {
+const UsersTable = ({ users, onSort, selectedSort, onToggleBookMark, ...rest }) => {
     const columns = {
         name: {
             path: "name",
@@ -28,16 +28,6 @@ const UsersTable = ({ users, onSort, selectedSort, onToggleBookMark, onDelete, .
             component: (user) => (
                 <button onClick={ () => onToggleBookMark(user._id) }>
                     <Bookmark />
-                </button>
-            )
-        },
-        delete: {
-            component: (user) => (
-                <button
-                    className="btn btn-danger"
-                    onClick={ () => onDelete(user._id) }
-                >
-                    Delete
                 </button>
             )
         }
@@ -69,8 +59,7 @@ UsersTable.propTypes = {
     users: PropTypes.array.isRequired,
     onSort: PropTypes.func.isRequired,
     selectedSort: PropTypes.object.isRequired,
-    onToggleBookMark: PropTypes.func.isRequired,
-    onDelete: PropTypes.func.isRequired
+    onToggleBookMark: PropTypes.func.isRequired
 };
 
 export default UsersTable;

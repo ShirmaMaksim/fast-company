@@ -16,7 +16,7 @@ const LoginForm = () => {
         };
         try {
             await signIn(newData);
-            history.push("/");
+            history.push(history.location.state ? history.location.state.from.pathname : "/");
         } catch (error) {
             toast.error(error.email);
         }

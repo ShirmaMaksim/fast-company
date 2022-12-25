@@ -8,6 +8,7 @@ import _ from "lodash";
 import SearchString from "../../ui/searchString";
 import { useUser } from "../../../hooks/useUsers";
 import { useProfessions } from "../../../hooks/useProfession";
+import { useAuth } from "../../../hooks/useAuth";
 
 const UsersListPage = () => {
     const pageSize = 4;
@@ -17,8 +18,9 @@ const UsersListPage = () => {
     const [sortBy, setSortBy] = useState({ iter: "name", order: "asc" });
     const [searchStringValue, setSearchString] = useState("");
 
+    const { currentUser } = useAuth();
     const { users } = useUser();
-    const { professions } = useProfessions();
+    const { isLoading: professionsLoading, professions } = useProfessions();
 
     const handleSearchStringChange = ({ target }) => {
         const { value } = target;
@@ -55,17 +57,28 @@ const UsersListPage = () => {
         setCurrentPage(1);
     }, [selectedProf]);
 
-    if (users) {
+    function filterUsers(data) {
         const filteredUsers = searchStringValue
-            ? (users.filter(user => user.name.includes(searchStringValue)))
-            : (selectedProf ? users.filter(user => Object.keys(user.profession).every(key => user.profession[key] === selectedProf[key])) : users);
+            ? data.filter(
+                user => user.name.includes(searchStringValue))
+            : selectedProf
+                ? users.filter(
+                    user =>
+                        JSON.stringify(user.profession) ===
+                        JSON.stringify(selectedProf))
+                : users;
+        return filteredUsers.filter(user => user._id !== currentUser._id);
+    }
+
+    if (users) {
+        const filteredUsers = filterUsers(users);
         const count = filteredUsers.length;
         const sortedUsers = _.orderBy(filteredUsers, [sortBy.path], [sortBy.order]);
         const userCrop = paginate(sortedUsers, currentPage, pageSize);
         return (
             <div className="container">
                 <div className="d-flex">
-                    { professions &&
+                    { professions && !professionsLoading &&
                         <div className="d-flex flex-column flex-shrink-0 p-3">
                             <GroupList
                                 selectedItem={ selectedProf }

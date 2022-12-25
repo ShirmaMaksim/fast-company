@@ -1,31 +1,27 @@
-import React, { useState, useEffect } from "react";
-import FormComponent, { SelectField, TextAreaField } from "../../common/form";
-import api from "../../../api";
+import React, { useState } from "react";
+import FormComponent, { TextAreaField } from "../../common/form";
 import PropTypes from "prop-types";
 
 const AddCommentForm = ({ onSubmit }) => {
-    const [users, setUsers] = useState();
-    useEffect(() => {
-        api.users.fetchAll().then(data => setUsers(data));
-    });
-    const arrayOfUsers = users && Object.keys(users).map(userId => ({
-        name: users[userId].name,
-        value: users[userId]._id
-    }));
+    const [data, setData] = useState();
+
+    const handleChange = (target) => {
+        setData(prevState => ({
+            ...prevState,
+            [target.name]: target.value
+        }));
+    };
+
     return (
         <FormComponent
             onSubmit={ onSubmit }
         >
-            <SelectField
-                label="Выберите пользователя"
-                name="userId"
-                defaultOption="Выберите пользователя"
-                options={ arrayOfUsers }
-            />
             <TextAreaField
+                onChange={handleChange}
                 label="Комментарий"
                 name="content"
                 rows={ 3 }
+                value={ data?.content || "" }
             />
             <button
                 type="submit"
